@@ -2,6 +2,7 @@ package com.jdong.studycafe.beverages.service;
 
 import com.jdong.studycafe.beverages.dto.BeverageDTO;
 import com.jdong.studycafe.beverages.domain.Beverage;
+import com.jdong.studycafe.beverages.exception.BeverageNotFoundException;
 import com.jdong.studycafe.beverages.repository.BeverageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +20,7 @@ public class BeverageServiceImpl implements BeverageService {
     @Override
     public BeverageDTO getBeverageByBeverageId(Long beverageId) {
         Optional<Beverage> optionalBeverage = beverageRepository.findById(beverageId);
-        Beverage beverage = optionalBeverage.orElseThrow();
+        Beverage beverage = optionalBeverage.orElseThrow(() -> new BeverageNotFoundException(beverageId));
 
         BeverageDTO beverageDTO = BeverageDTO.builder()
                 .beverageId(beverage.getId())

@@ -4,6 +4,7 @@ import com.jdong.studycafe.cafes.dto.CafeDTO;
 import com.jdong.studycafe.cafes.dto.CafeMapRequestDTO;
 import com.jdong.studycafe.cafes.dto.CafeWithImageDto;
 import com.jdong.studycafe.cafes.domain.Cafe;
+import com.jdong.studycafe.cafes.exception.CafeNotFoundException;
 import com.jdong.studycafe.cafes.repository.CafeImageRepository;
 import com.jdong.studycafe.cafes.repository.CafeRepository;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,7 @@ public class CafeServiceImpl implements CafeService {
     public CafeDTO findCafeById(Long id) {
         Optional<Cafe> optionalCafe = cafeRepository.findById(id);
         if (!optionalCafe.isPresent()) {
-            throw new IllegalArgumentException();
+            throw new CafeNotFoundException(id);
         }
         Cafe cafe = optionalCafe.get();
         CafeDTO result = CafeDTO.builder()
@@ -84,8 +85,8 @@ public class CafeServiceImpl implements CafeService {
 
     @Override
     public List<CafeDTO> findCafeWithLocation(CafeMapRequestDTO cafeMapRequestDTO) {
-        Double longitude = cafeMapRequestDTO.getLongitude();
-        Double latitude = cafeMapRequestDTO.getLatitude();
+        String longitude = cafeMapRequestDTO.getLongitude();
+        String latitude = cafeMapRequestDTO.getLatitude();
         Double radius = cafeMapRequestDTO.getRadius();
         String pointWKT = String.format("POINT(%s %s)", longitude, latitude);
         Point point = null;

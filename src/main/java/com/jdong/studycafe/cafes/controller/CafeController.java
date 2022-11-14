@@ -7,6 +7,7 @@ import com.jdong.studycafe.cafes.service.CafeImageService;
 import com.jdong.studycafe.cafes.service.CafeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -21,7 +22,7 @@ public class CafeController {
     private final CafeImageService cafeImageService;
 
     @GetMapping("/list/location")
-    public ResponseEntity<Map<String, Object>> findCafeWithLocation(@RequestBody CafeMapRequestDTO cafeMapRequestDTO) {
+    public ResponseEntity<Map<String, Object>> findCafeWithLocation(@RequestBody @Validated CafeMapRequestDTO cafeMapRequestDTO) {
         List<CafeDTO> cafeWithLocation = cafeService.findCafeWithLocation(cafeMapRequestDTO);
 
         HashMap<String, Object> resultMap = new HashMap<>();

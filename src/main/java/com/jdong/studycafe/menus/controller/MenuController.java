@@ -28,10 +28,11 @@ public class MenuController {
     @GetMapping("/list/{cafeId}")
     public ResponseEntity<Map<String, Object>> findMenusByCafeId(@PathVariable(value = "cafeId") Long cafeId) {
 
+        CafeDTO cafe = cafeService.findCafeById(cafeId);
         List<MenuDTO> menuList = menuService.getMenuListByCafeId(cafeId);
 
         HashMap<String, Object> resultMap = new HashMap<>();
-        resultMap.put("cafeId", cafeId);
+        resultMap.put("cafe", cafe);
         resultMap.put("menuList", menuList);
 
         return ResponseEntity.ok().body(resultMap);
