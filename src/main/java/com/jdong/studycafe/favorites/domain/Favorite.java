@@ -3,7 +3,7 @@ package com.jdong.studycafe.favorites.domain;
 import com.jdong.studycafe.common.domain.BaseTimeEntity;
 import com.jdong.studycafe.beverages.domain.Beverage;
 import com.jdong.studycafe.cafes.domain.Cafe;
-import com.jdong.studycafe.Members.domain.Member;
+import com.jdong.studycafe.members.domain.Member;
 import lombok.*;
 
 import javax.persistence.*;

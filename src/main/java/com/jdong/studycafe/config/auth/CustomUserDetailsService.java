@@ -1,7 +1,7 @@
 package com.jdong.studycafe.config.auth;
 
-import com.jdong.studycafe.Members.domain.Member;
-import com.jdong.studycafe.Members.repository.MemberRepository;
+import com.jdong.studycafe.members.domain.Member;
+import com.jdong.studycafe.members.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;

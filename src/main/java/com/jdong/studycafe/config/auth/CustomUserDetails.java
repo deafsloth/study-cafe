@@ -1,6 +1,6 @@
 package com.jdong.studycafe.config.auth;
 
-import com.jdong.studycafe.Members.domain.Member;
+import com.jdong.studycafe.members.domain.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

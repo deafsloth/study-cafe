@@ -1,4 +1,4 @@
-package com.jdong.studycafe.Members.domain;
+package com.jdong.studycafe.members.domain;
 
 import com.jdong.studycafe.common.domain.BaseTimeEntity;
 import com.jdong.studycafe.favorites.domain.Favorite;

@@ -26,4 +26,12 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
             "where f.id=:favoriteId")
     Favorite findByFavoriteId(Long favoriteId);
 
+
+    @Query("select f " +
+            "from Favorite f " +
+            "where f.member.id=:memberId " +
+                "and f.cafe.id=:cafeId " +
+                "and f.beverage.id=:beverageId")
+    List<Favorite> findByFavorite(Long memberId,Long cafeId,Long beverageId);
+
 }

@@ -1,7 +1,7 @@
 package com.jdong.studycafe.config;
 
 import com.jdong.studycafe.config.jwt.JwtAuthorizationFilter;
-import com.jdong.studycafe.Members.repository.MemberRepository;
+import com.jdong.studycafe.members.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

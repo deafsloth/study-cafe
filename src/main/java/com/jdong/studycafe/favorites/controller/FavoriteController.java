@@ -1,23 +1,18 @@
 package com.jdong.studycafe.favorites.controller;
 
-import com.jdong.studycafe.common.domain.ErrorResponse;
 import com.jdong.studycafe.config.auth.CustomUserDetails;
 import com.jdong.studycafe.favorites.dto.FavoriteDTO;
 import com.jdong.studycafe.favorites.dto.FavoriteRequestDTO;
-import com.jdong.studycafe.cafes.service.CafeService;
 import com.jdong.studycafe.favorites.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

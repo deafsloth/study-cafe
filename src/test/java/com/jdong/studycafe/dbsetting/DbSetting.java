@@ -1,6 +1,6 @@
 package com.jdong.studycafe.dbsetting;
 
-import com.jdong.studycafe.Members.domain.Member;
+import com.jdong.studycafe.members.domain.Member;
 import com.jdong.studycafe.beverages.domain.Beverage;
 import com.jdong.studycafe.beverages.domain.BeverageImage;
 import com.jdong.studycafe.cafes.domain.Cafe;
@@ -9,13 +9,11 @@ import com.jdong.studycafe.cafes.repository.CafeImageRepository;
 import com.jdong.studycafe.cafes.repository.CafeRepository;
 import com.jdong.studycafe.common.enumerate.Region;
 import com.jdong.studycafe.favorites.repository.FavoriteRepository;
-import com.jdong.studycafe.cafes.repository.*;
 import com.jdong.studycafe.beverages.repository.BeverageImageRepository;
 import com.jdong.studycafe.beverages.repository.BeverageRepository;
-import com.jdong.studycafe.Members.repository.MemberRepository;
+import com.jdong.studycafe.members.repository.MemberRepository;
 import com.jdong.studycafe.menus.domain.Menu;
 import com.jdong.studycafe.menus.repository.MenuRepository;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
@@ -23,10 +21,6 @@ import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 @SpringBootTest
 @Log4j2

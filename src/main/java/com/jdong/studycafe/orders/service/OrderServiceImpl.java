@@ -1,7 +1,7 @@
 package com.jdong.studycafe.orders.service;
 
-import com.jdong.studycafe.Members.domain.Member;
-import com.jdong.studycafe.Members.repository.MemberRepository;
+import com.jdong.studycafe.members.domain.Member;
+import com.jdong.studycafe.members.repository.MemberRepository;
 import com.jdong.studycafe.beverages.domain.Beverage;
 import com.jdong.studycafe.beverages.repository.BeverageRepository;
 import com.jdong.studycafe.cafes.domain.Cafe;

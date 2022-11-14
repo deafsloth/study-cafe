@@ -1,6 +1,6 @@
 package com.jdong.studycafe.orders.domain;
 
-import com.jdong.studycafe.Members.domain.Member;
+import com.jdong.studycafe.members.domain.Member;
 import com.jdong.studycafe.beverages.domain.Beverage;
 import com.jdong.studycafe.cafes.domain.Cafe;
 import com.jdong.studycafe.common.domain.BaseTimeEntity;

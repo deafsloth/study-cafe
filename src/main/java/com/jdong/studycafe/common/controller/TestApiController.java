@@ -1,7 +1,7 @@
 package com.jdong.studycafe.common.controller;
 
 import com.jdong.studycafe.config.auth.CustomUserDetails;
-import com.jdong.studycafe.Members.repository.MemberRepository;
+import com.jdong.studycafe.members.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
