@@ -1,6 +1,9 @@
 package com.jdong.studycafe.orders.service;
 
+import com.jdong.studycafe.beverages.exception.BeverageNotFoundException;
+import com.jdong.studycafe.cafes.exception.CafeNotFoundException;
 import com.jdong.studycafe.members.domain.Member;
+import com.jdong.studycafe.members.exception.MemberNotFoundException;
 import com.jdong.studycafe.members.repository.MemberRepository;
 import com.jdong.studycafe.beverages.domain.Beverage;
 import com.jdong.studycafe.beverages.repository.BeverageRepository;
@@ -10,6 +13,7 @@ import com.jdong.studycafe.orders.domain.Order;
 import com.jdong.studycafe.orders.dto.OrderCountDTO;
 import com.jdong.studycafe.orders.dto.OrderDTO;
 import com.jdong.studycafe.orders.dto.OrderRequestDTO;
+import com.jdong.studycafe.orders.exception.NotEnoughMoneyException;
 import com.jdong.studycafe.orders.repository.OrderQuerydslRepository;
 import com.jdong.studycafe.orders.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,35 +39,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDTO postPremiumOrder(OrderRequestDTO orderRequestDTO, Long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
-        Member member = optionalMember.orElseThrow();
+        Member member = optionalMember.orElseThrow(()-> new MemberNotFoundException(memberId));
         Optional<Cafe> optionalCafe = cafeRepository.findById(orderRequestDTO.getCafeId());
-        Cafe cafe = optionalCafe.orElseThrow();
+        Cafe cafe = optionalCafe.orElseThrow(()-> new CafeNotFoundException(orderRequestDTO.getCafeId()));
         Optional<Beverage> optionalBeverage = beverageRepository.findById(orderRequestDTO.getBeverageId());
-        Beverage beverage = optionalBeverage.orElseThrow();
+        Beverage beverage = optionalBeverage.orElseThrow(()->new BeverageNotFoundException((orderRequestDTO.getBeverageId())));
+        if (member.getSpecialCredit() >= orderRequestDTO.getCost()) {
+            int specialCredit = member.getSpecialCredit();
+            specialCredit -= orderRequestDTO.getCost();
+            member.setSpecialCredit(specialCredit);
+            memberRepository.save(member);
+            Order order = Order.builder()
+                    .member(member)
+                    .beverage(beverage)
+                    .cafe(cafe)
+                    .chargedTime(orderRequestDTO.getChargedTime())
+                    .cost(orderRequestDTO.getCost())
+                    .build();
 
-        Order order = Order.builder()
-                .member(member)
-                .beverage(beverage)
-                .cafe(cafe)
-                .chargedTime(orderRequestDTO.getChargedTime())
-                .cost(orderRequestDTO.getCost())
-                .build();
+            Order saved = orderRepository.save(order);
 
-        Order saved = orderRepository.save(order);
-
-        OrderDTO result = OrderDTO.builder()
-                .orderId(saved.getId())
-                .cafeId(saved.getCafe().getId())
-                .cafeName(saved.getCafe().getName())
-                .beverageId(saved.getBeverage().getId())
-                .beverageName(saved.getBeverage().getName())
-                .mainImageUrl(saved.getBeverage().getMainImageUrl())
-                .chargedTime(saved.getChargedTime())
-                .cost(saved.getCost())
-                .createTime(saved.getCreatedDate())
-                .modifiedTime(saved.getModifiedDate())
-                .build();
-        return result;
+            OrderDTO result = OrderDTO.builder()
+                    .orderId(saved.getId())
+                    .cafeId(saved.getCafe().getId())
+                    .cafeName(saved.getCafe().getName())
+                    .beverageId(saved.getBeverage().getId())
+                    .beverageName(saved.getBeverage().getName())
+                    .mainImageUrl(saved.getBeverage().getMainImageUrl())
+                    .chargedTime(saved.getChargedTime())
+                    .cost(saved.getCost())
+                    .createTime(saved.getCreatedDate())
+                    .modifiedTime(saved.getModifiedDate())
+                    .build();
+            return result;
+        } else{
+            throw new NotEnoughMoneyException(memberId.toString());
+        }
     }
 
     @Override

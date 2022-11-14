@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -27,7 +28,7 @@ public class OrderController {
     @PostMapping("/premium")
     public ResponseEntity<HashMap<String, Object>> postPremiumOrder(
             Authentication authentication,
-            @RequestBody @Valid OrderRequestDTO orderRequestDTO
+            @RequestBody @Validated OrderRequestDTO orderRequestDTO
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         OrderDTO orderDTO = orderService.postPremiumOrder(orderRequestDTO, userDetails.getMember().getId());

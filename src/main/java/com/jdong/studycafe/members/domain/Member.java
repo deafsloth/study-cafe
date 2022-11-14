@@ -16,6 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Getter
+@Setter
 @ToString
 @Entity
 public class Member extends BaseTimeEntity {

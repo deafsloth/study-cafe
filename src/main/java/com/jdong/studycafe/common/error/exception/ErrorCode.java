@@ -29,6 +29,10 @@ public enum ErrorCode {
     FAVORITE_DUPLICATION(400, "F001", "Favorite is Duplicated"),
     FAVORITE_NOT_FOUND(400, "F002", "Favorite Entity Not Found"),
 
+
+
+    // Order
+    NOT_ENOUGH_CREDIT(400, "E001", "User does not have enough credit"),
     ;
     private final String code;
     private final String message;
