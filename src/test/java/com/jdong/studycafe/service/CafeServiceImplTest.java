@@ -22,15 +22,15 @@ class CafeServiceImplTest {
 
     @Test
     public void 점을기준으로_반지름만큼_카페탐색() {
-        CafeMapRequestDTO cafeMapRequest = CafeMapRequestDTO.builder()
-                .longitude(127.123)
-                .latitude(32.123)
-                .radius(100000D).build();
-
-        List<CafeDTO> cafeWithLocationList = cafeService.findCafeWithLocation(cafeMapRequest);
-        cafeWithLocationList.stream()
-                .map(cafeDTO -> cafeDTO.getName())
-                .forEach(cafeName-> System.out.println("cafeName = " + cafeName));
+//        CafeMapRequestDTO cafeMapRequest = CafeMapRequestDTO.builder()
+//                .longitude(127.123)
+//                .latitude(32.123)
+//                .radius(100000D).build();
+//
+//        List<CafeDTO> cafeWithLocationList = cafeService.findCafeWithLocation(cafeMapRequest);
+//        cafeWithLocationList.stream()
+//                .map(cafeDTO -> cafeDTO.getName())
+//                .forEach(cafeName-> System.out.println("cafeName = " + cafeName));
 
     }
 

@@ -1,9 +1,8 @@
 package com.jdong.studycafe.orders.repository;
 
-import com.jdong.studycafe.orders.dto.OrderCountDTO;
-import com.jdong.studycafe.orders.dto.OrderDTO;
-import com.jdong.studycafe.orders.dto.QOrderCountDTO;
-import com.jdong.studycafe.orders.dto.QOrderDTO;
+import com.jdong.studycafe.menus.dto.MenuDTO;
+import com.jdong.studycafe.menus.dto.QMenuDTO;
+import com.jdong.studycafe.orders.dto.*;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -44,39 +43,46 @@ public class OrderQuerydslRepository {
     }
 
     public List<OrderCountDTO> getMostOrderList() {
-        NumberPath<Long> aliasCount = Expressions.numberPath(Long.class, "count");
+        NumberPath<Long> cnt = Expressions.numberPath(Long.class, "cnt");
         List<OrderCountDTO> result = jpaQueryFactory
                 .select(new QOrderCountDTO(
                         order.cafe.id,
                         order.beverage.id,
-                        order.id.count().as("count"))
+                        order.id.count().as("cnt"))
                 )
                 .from(order)
                 .leftJoin(order.beverage, beverage)
                 .leftJoin(order.cafe, cafe)
-                .groupBy(order.beverage.id)
-                .groupBy(order.cafe.id)
-                .orderBy(aliasCount.desc())
+                .groupBy(order.beverage.id,order.cafe.id)
+                .orderBy(cnt.desc())
+                .limit(1)
                 .fetch();
         return result;
     }
 
-//    public List<OrderCountDTO> getMostOrderList() {
-//        List<OrderCountDTO> result = jpaQueryFactory
-//                .select(new QOrderCountDTO(
-//                        order.cafe.id,
-//                        order.cafe.name,
-//                        order.beverage.id,
-//                        order.beverage.name,
-//                        order.beverage.mainImageUrl,
-//                        order.id.count().as("count"))
-//                )
-//                .from(order)
-//                .leftJoin(order.beverage, beverage)
-//                .leftJoin(order.cafe, cafe)
-//                .groupBy(order.beverage.id)
-//                .groupBy(order.cafe.id)
-//                .fetch();
-//        return result;
-//    }
+    public List<MostOrderDTO> getMostOrderedMenu(Long cafeId) {
+        NumberPath<Long> cnt = Expressions.numberPath(Long.class, "cnt");
+        List<MostOrderDTO> result = jpaQueryFactory
+                .select(new QMostOrderDTO(
+                        order.cafe.id,
+                        order.cafe.name,
+                        order.beverage.id,
+                        order.beverage.name,
+                        order.beverage.mainImageUrl,
+                        order.id.count().as("cnt"))
+                )
+                .from(order)
+                .leftJoin(order.beverage, beverage)
+                .leftJoin(order.cafe, cafe)
+                .groupBy(order.cafe.id,
+                        order.cafe.name,
+                        order.beverage.id,
+                        order.beverage.name,
+                        order.beverage.mainImageUrl)
+                .having(order.cafe.id.eq(cafeId))
+                .orderBy(cnt.desc())
+                .limit(1)
+                .fetch();
+        return result;
+    }
 }

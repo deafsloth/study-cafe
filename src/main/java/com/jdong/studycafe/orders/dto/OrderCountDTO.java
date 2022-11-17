@@ -47,12 +47,12 @@ public class OrderCountDTO {
 
     private Long cafeId;
     private Long beverageId;
-    private Long count;
+    private Long cnt;
 
     @QueryProjection
-    public OrderCountDTO(Long cafeId, Long beverageId, Long count) {
+    public OrderCountDTO(Long cafeId, Long beverageId, Long cnt) {
         this.cafeId = cafeId;
         this.beverageId = beverageId;
-        this.count = count;
+        this.cnt = cnt;
     }
 }

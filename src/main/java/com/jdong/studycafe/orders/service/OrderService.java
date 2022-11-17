@@ -1,6 +1,8 @@
 package com.jdong.studycafe.orders.service;
 
+import com.jdong.studycafe.cafes.domain.Cafe;
 import com.jdong.studycafe.orders.domain.Order;
+import com.jdong.studycafe.orders.dto.MostOrderDTO;
 import com.jdong.studycafe.orders.dto.OrderCountDTO;
 import com.jdong.studycafe.orders.dto.OrderDTO;
 import com.jdong.studycafe.orders.dto.OrderRequestDTO;
@@ -16,5 +18,6 @@ public interface OrderService {
 
     List<OrderDTO> getOrderListByMemberId(Long memberId);
 
-    List<OrderCountDTO> getMostOrderList();
+    MostOrderDTO getMostOrderedMenu(Long cafeId);
+
 }

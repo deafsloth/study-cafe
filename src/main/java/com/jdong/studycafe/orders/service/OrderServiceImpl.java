@@ -10,6 +10,7 @@ import com.jdong.studycafe.beverages.repository.BeverageRepository;
 import com.jdong.studycafe.cafes.domain.Cafe;
 import com.jdong.studycafe.cafes.repository.CafeRepository;
 import com.jdong.studycafe.orders.domain.Order;
+import com.jdong.studycafe.orders.dto.MostOrderDTO;
 import com.jdong.studycafe.orders.dto.OrderCountDTO;
 import com.jdong.studycafe.orders.dto.OrderDTO;
 import com.jdong.studycafe.orders.dto.OrderRequestDTO;
@@ -90,9 +91,15 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderCountDTO> getMostOrderList() {
-        List<OrderCountDTO> mostOrderList = orderQuerydslRepository.getMostOrderList();
-        return mostOrderList;
+    public MostOrderDTO getMostOrderedMenu(Long cafeId) {
+        Optional<Cafe> optionalCafe = cafeRepository.findById(cafeId);
+        if (!optionalCafe.isPresent()) {
+            throw new CafeNotFoundException(cafeId);
+        }
+        List<MostOrderDTO> mostOrderedMenu = orderQuerydslRepository.getMostOrderedMenu(cafeId);
+        if (mostOrderedMenu.size() == 0) {
+            return null;
+        }
+        return mostOrderedMenu.get(0);
     }
-
 }

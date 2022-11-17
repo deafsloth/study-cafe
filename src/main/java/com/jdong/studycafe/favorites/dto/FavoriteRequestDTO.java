@@ -16,11 +16,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class FavoriteRequestDTO {
 
-    @NotBlank(message = "beverageId 값은 비어었을 수 없습니다.")
+    @NotNull(message = "beverageId 값은 비어었을 수 없습니다.")
     @Min(value=1,message = "beverageId 값은 1이상이어야 합니다.")
     private Long beverageId;
 
-    @NotBlank(message = "CafeId 값은 비어었을 수 없습니다.")
+    @NotNull(message = "CafeId 값은 비어었을 수 없습니다.")
     @Min(value=1,message = "CafeId 값은 1이상이어야 합니다.")
     private Long cafeId;
 }

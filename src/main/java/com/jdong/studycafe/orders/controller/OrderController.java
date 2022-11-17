@@ -2,6 +2,7 @@ package com.jdong.studycafe.orders.controller;
 
 import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import com.jdong.studycafe.config.auth.CustomUserDetails;
+import com.jdong.studycafe.orders.dto.MostOrderDTO;
 import com.jdong.studycafe.orders.dto.OrderCountDTO;
 import com.jdong.studycafe.orders.dto.OrderDTO;
 import com.jdong.studycafe.orders.dto.OrderRequestDTO;
@@ -55,12 +56,17 @@ public class OrderController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/most")
-    public ResponseEntity<HashMap<String, Object>> getMostOrderList() {
-        List<OrderCountDTO> mostOrderList = orderService.getMostOrderList();
-
+    @GetMapping("/most/{cafeId}")
+    public ResponseEntity<HashMap<String, Object>> getMostOrderList(@PathVariable(value = "cafeId") Long cafeId) {
+        MostOrderDTO mostOrderedMenu = orderService.getMostOrderedMenu(cafeId);
         HashMap<String, Object> result = new HashMap<>();
-        result.put("orderList", mostOrderList);
+        if (mostOrderedMenu != null) {
+            result.put("mostOrderedMenu", mostOrderedMenu);
+            result.put("cafeId", cafeId);
+        } else {
+            result.put("mostOrderedMenu", "판매 기록 없음");
+            result.put("cafeId", cafeId);
+        }
 
         return ResponseEntity.ok().body(result);
     }
