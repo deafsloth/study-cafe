@@ -2,11 +2,9 @@ package com.jdong.studycafe.orders.controller;
 
 import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import com.jdong.studycafe.config.auth.CustomUserDetails;
-import com.jdong.studycafe.orders.dto.MostOrderDTO;
-import com.jdong.studycafe.orders.dto.OrderCountDTO;
-import com.jdong.studycafe.orders.dto.OrderDTO;
-import com.jdong.studycafe.orders.dto.OrderRequestDTO;
+import com.jdong.studycafe.orders.dto.*;
 import com.jdong.studycafe.orders.service.OrderService;
+import com.jdong.studycafe.orders.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +23,7 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
+    private final StudyService studyService;
 
     @PostMapping("/v2/orders/premium")
     public ResponseEntity<HashMap<String, Object>> postPremiumOrder(
@@ -32,9 +31,11 @@ public class OrderController {
             @RequestBody @Validated OrderRequestDTO orderRequestDTO
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        StudyDTO studyDTO = studyService.postPremiunStudy(orderRequestDTO, userDetails.getMember().getId());
         OrderDTO orderDTO = orderService.postPremiumOrder(orderRequestDTO, userDetails.getMember().getId());
 
         HashMap<String, Object> result = new HashMap<>();
+        result.put("savedStudy", studyDTO);
         result.put("savedOrder", orderDTO);
         result.put("message", "save order success");
 

@@ -7,6 +7,7 @@ import com.jdong.studycafe.config.oauth.provider.GoogleUser;
 import com.jdong.studycafe.config.oauth.provider.OAuthUserInfo;
 import com.jdong.studycafe.members.domain.Member;
 import com.jdong.studycafe.members.repository.MemberRepository;
+import com.jdong.studycafe.orders.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class JwtCreateController {
     private final MemberRepository memberRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final StudyService studyService;
 
     @PostMapping("/oauth/jwt/google")
     public String jwtCreate(@RequestBody Map<String, Object> data) {
@@ -34,7 +36,7 @@ public class JwtCreateController {
         if (memberEntity == null) {
             Member memberRequest = Member.builder()
                     .username(googleUser.getProvider() + "_" + googleUser.getProviderId())
-                    .password(bCryptPasswordEncoder.encode("thisissecret"))
+                    .password(bCryptPasswordEncoder.encode(JwtProperties.BCRYPT_RAWPASSWORD))
                     .email(googleUser.getEmail())
                     .provider(googleUser.getProvider())
                     .providerId(googleUser.getProviderId())
@@ -45,12 +47,14 @@ public class JwtCreateController {
             memberEntity = memberRepository.save(memberRequest);
 
         }
+        Boolean studying = studyService.isStudying(memberEntity.getId());
 
         String jwtToken = JWT.create()
                 .withSubject(memberEntity.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", memberEntity.getId())
                 .withClaim("username", memberEntity.getUsername())
+                .withClaim("isStudying", studying.toString())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         return jwtToken;

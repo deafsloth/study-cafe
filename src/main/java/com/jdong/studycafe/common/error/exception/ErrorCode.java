@@ -29,7 +29,9 @@ public enum ErrorCode {
     FAVORITE_DUPLICATION(400, "F001", "Favorite is Duplicated"),
     FAVORITE_NOT_FOUND(400, "F002", "Favorite Entity Not Found"),
 
-
+    // Study
+    MEMBER_IS_STUDYING(400, "S001", "User is Studying"),
+    MEMBER_HAS_DUPLICATE_STUDY_RECORD(400, "S002", "This user has more than one study record."),
 
     // Order
     NOT_ENOUGH_CREDIT(400, "E001", "User does not have enough credit"),

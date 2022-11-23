@@ -41,6 +41,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("username").asString();
+        String isStudying = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("isStudying").asString();
+        System.out.println("isStudying = " + isStudying);
 
         if (username != null) {
             System.out.println("username = " + username);
