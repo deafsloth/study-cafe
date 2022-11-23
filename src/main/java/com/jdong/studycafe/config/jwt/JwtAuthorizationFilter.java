@@ -5,6 +5,8 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.jdong.studycafe.config.auth.CustomUserDetails;
 import com.jdong.studycafe.members.domain.Member;
 import com.jdong.studycafe.members.repository.MemberRepository;
+import com.jdong.studycafe.orders.exception.IsStudyingException;
+import com.jdong.studycafe.orders.service.StudyService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +24,12 @@ import java.io.IOException;
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     private MemberRepository memberRepository;
+    private StudyService studyService;
 
-    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository) {
+    public JwtAuthorizationFilter(AuthenticationManager authenticationManager, MemberRepository memberRepository,StudyService studyService) {
         super(authenticationManager);
         this.memberRepository = memberRepository;
+        this.studyService = studyService;
     }
 
     @Override
@@ -41,21 +45,26 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         String token = request.getHeader(JwtProperties.HEADER_STRING).replace(JwtProperties.TOKEN_PREFIX, "");
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("username").asString();
-        String isStudying = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("isStudying").asString();
-        System.out.println("isStudying = " + isStudying);
-
+//        String isStudying = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(token).getClaim("isStudying").asString();
+//        System.out.println("isStudying = " + isStudying);
+        
         if (username != null) {
             System.out.println("username = " + username);
             Member member = memberRepository.findByUsername(username);
 
-            CustomUserDetails userDetails = new CustomUserDetails(member);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-            );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            Boolean isStudying = studyService.isStudying(member.getId());
+            if (isStudying == Boolean.TRUE) {
+                throw new IsStudyingException(member.getId().toString());
+            } else {
 
+                CustomUserDetails userDetails = new CustomUserDetails(member);
+                Authentication authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
         }
         chain.doFilter(request,response);
 
