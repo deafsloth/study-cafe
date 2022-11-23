@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("api/member")
+@RequestMapping("api/v2/member")
 public class MemberController {
 
     private final MemberService memberService;

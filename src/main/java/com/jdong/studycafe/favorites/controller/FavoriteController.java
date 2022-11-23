@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("api/favorites")
+@RequestMapping("api/v2/favorites")
 public class FavoriteController {
 
     private final FavoriteService favoriteService;

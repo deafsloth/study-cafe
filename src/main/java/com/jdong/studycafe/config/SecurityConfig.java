@@ -34,10 +34,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable()
                 .httpBasic().disable()
 
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository))
                 .authorizeRequests()
-                .antMatchers("/api/**")
-                .access("hasRole('ROLE_USER')")
-                .anyRequest().permitAll();
+                .antMatchers("/api/v1/**").permitAll();
+//                .anyRequest().permitAll();
+
+        http.antMatcher("/api/v2/**").addFilter(new JwtAuthorizationFilter(authenticationManager(), memberRepository));
     }
 }

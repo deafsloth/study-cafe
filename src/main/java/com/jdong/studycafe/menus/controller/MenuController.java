@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/menus")
+@RequestMapping("/api/v1/menus")
 @RequiredArgsConstructor
 public class MenuController {
 

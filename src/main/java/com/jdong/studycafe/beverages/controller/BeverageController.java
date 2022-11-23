@@ -19,7 +19,7 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("api/beverage")
+@RequestMapping("api/v1/beverage")
 public class BeverageController {
 
     private final BeverageService beverageService;

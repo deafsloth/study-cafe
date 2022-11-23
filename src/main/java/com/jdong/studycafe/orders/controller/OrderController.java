@@ -21,12 +21,12 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @Log4j2
-@RequestMapping("api/orders")
+@RequestMapping("api")
 public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/premium")
+    @PostMapping("/v2/orders/premium")
     public ResponseEntity<HashMap<String, Object>> postPremiumOrder(
             Authentication authentication,
             @RequestBody @Validated OrderRequestDTO orderRequestDTO
@@ -41,7 +41,7 @@ public class OrderController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("")
+    @GetMapping("/v2/orders")
     public ResponseEntity<HashMap<String, Object>> getOrderListByMemberId(
             Authentication authentication
     ) {
@@ -56,7 +56,7 @@ public class OrderController {
         return ResponseEntity.ok().body(result);
     }
 
-    @GetMapping("/most/{cafeId}")
+    @GetMapping("/v1/orders/most/{cafeId}")
     public ResponseEntity<HashMap<String, Object>> getMostOrderList(@PathVariable(value = "cafeId") Long cafeId) {
         MostOrderDTO mostOrderedMenu = orderService.getMostOrderedMenu(cafeId);
         HashMap<String, Object> result = new HashMap<>();
