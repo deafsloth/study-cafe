@@ -21,6 +21,8 @@ public enum ErrorCode {
     // Cafe
     CAFE_NOT_FOUND(400, "CF001", "Cafe Entity Not Found"),
 
+    // To do
+    TODO_NOT_FOUND(400, "T001", "Todo Entity Not Found"),
 
     // Beverage
     BAVERAGE_NOT_FOUND(400, "B001", "Beverage Entity Not Found"),
