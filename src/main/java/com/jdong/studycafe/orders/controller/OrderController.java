@@ -3,6 +3,7 @@ package com.jdong.studycafe.orders.controller;
 import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import com.jdong.studycafe.config.auth.CustomUserDetails;
 import com.jdong.studycafe.orders.dto.*;
+import com.jdong.studycafe.orders.exception.IsStudyingException;
 import com.jdong.studycafe.orders.service.OrderService;
 import com.jdong.studycafe.orders.service.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,10 @@ public class OrderController {
             @RequestBody @Validated OrderRequestDTO orderRequestDTO
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
         StudyDTO studyDTO = studyService.postPremiunStudy(orderRequestDTO, userDetails.getMember().getId());
         OrderDTO orderDTO = orderService.postPremiumOrder(orderRequestDTO, userDetails.getMember().getId());
 
@@ -47,6 +52,10 @@ public class OrderController {
             Authentication authentication
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
         Long memberId = userDetails.getMember().getId();
         List<OrderDTO> orderList = orderService.getOrderListByMemberId(memberId);
 

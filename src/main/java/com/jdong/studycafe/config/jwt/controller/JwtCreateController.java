@@ -54,7 +54,7 @@ public class JwtCreateController {
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .withClaim("id", memberEntity.getId())
                 .withClaim("username", memberEntity.getUsername())
-                .withClaim("isStudying", studying.toString())
+//                .withClaim("isStudying", studying.toString())
                 .sign(Algorithm.HMAC512(JwtProperties.SECRET));
 
         return jwtToken;

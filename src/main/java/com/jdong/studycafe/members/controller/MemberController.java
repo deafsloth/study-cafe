@@ -7,6 +7,8 @@ import com.jdong.studycafe.members.dto.MemberDTO;
 import com.jdong.studycafe.members.service.MemberService;
 import com.jdong.studycafe.orders.dto.OrderDTO;
 import com.jdong.studycafe.orders.dto.OrderRequestDTO;
+import com.jdong.studycafe.orders.exception.IsStudyingException;
+import com.jdong.studycafe.orders.service.StudyService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,7 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
+    private final StudyService studyService;
 
     @PostMapping("/charge/special")
     public ResponseEntity<HashMap<String, Object>> postPremiumOrder(
@@ -31,6 +34,10 @@ public class MemberController {
             @RequestBody @Validated ChargeRequestDTO chargeRequestDTO
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
         Member member = memberService.chargeSpecialCredit(chargeRequestDTO, userDetails.getMember().getId());
 
         MemberDTO memberDTO = MemberDTO.builder()
@@ -55,6 +62,10 @@ public class MemberController {
             Authentication authentication
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
         Long memberId = userDetails.getMember().getId();
         Member member = memberService.findMemberById(memberId);
         

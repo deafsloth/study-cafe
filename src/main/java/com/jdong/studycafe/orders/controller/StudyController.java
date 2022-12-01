@@ -5,6 +5,7 @@ import com.jdong.studycafe.orders.dto.MostOrderDTO;
 import com.jdong.studycafe.orders.dto.OrderDTO;
 import com.jdong.studycafe.orders.dto.OrderRequestDTO;
 import com.jdong.studycafe.orders.dto.StudyDTO;
+import com.jdong.studycafe.orders.exception.IsStudyingException;
 import com.jdong.studycafe.orders.service.OrderService;
 import com.jdong.studycafe.orders.service.StudyService;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,10 @@ public class StudyController {
             Authentication authentication
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
         Boolean studying = studyService.isStudying(userDetails.getMember().getId());
         HashMap<String, Object> result = new HashMap<>();
         result.put("isStudy", studying);
