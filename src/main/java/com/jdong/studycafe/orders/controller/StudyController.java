@@ -26,7 +26,7 @@ public class StudyController {
 //    private final OrderService orderService;
     private final StudyService studyService;
 
-    @PostMapping("/v2/study/isStudy")
+    @GetMapping("/v2/study/isStudy")
     public ResponseEntity<HashMap<String, Object>> postPremiumOrder(
             Authentication authentication
     ) {
