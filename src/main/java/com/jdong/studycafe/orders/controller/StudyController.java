@@ -32,10 +32,6 @@ public class StudyController {
             Authentication authentication
     ) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
-        if (isStudying == Boolean.TRUE) {
-            throw new IsStudyingException(userDetails.getMember().getId().toString());
-        }
         Boolean studying = studyService.isStudying(userDetails.getMember().getId());
         HashMap<String, Object> result = new HashMap<>();
         result.put("isStudy", studying);
