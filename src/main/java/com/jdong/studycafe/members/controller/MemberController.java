@@ -57,6 +57,35 @@ public class MemberController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/charge/general")
+    public ResponseEntity<HashMap<String, Object>> postGeneralOrder(
+            Authentication authentication,
+            @RequestBody @Validated ChargeRequestDTO chargeRequestDTO
+    ) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
+        Member member = memberService.chargeGeneralCredit(chargeRequestDTO, userDetails.getMember().getId());
+
+        MemberDTO memberDTO = MemberDTO.builder()
+                .id(member.getId())
+                .name(member.getName())
+                .email(member.getEmail())
+                .specialCredit(member.getSpecialCredit())
+                .generalCredit(member.getGeneralCredit())
+                .createTime(member.getCreatedDate())
+                .modifiedTime(member.getModifiedDate())
+                .build();
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("chargedCreditMember", memberDTO);
+        result.put("message", "charge success");
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("")
     public ResponseEntity<HashMap<String, Object>> getMemberInfo(
             Authentication authentication

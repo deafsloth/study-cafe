@@ -7,4 +7,6 @@ public interface MemberService {
     Member chargeSpecialCredit(ChargeRequestDTO chargeRequestDTO, Long memberId);
 
     Member findMemberById(Long memberId);
+
+    Member chargeGeneralCredit(ChargeRequestDTO chargeRequestDTO, Long memberId);
 }

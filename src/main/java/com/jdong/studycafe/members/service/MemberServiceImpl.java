@@ -38,4 +38,16 @@ public class MemberServiceImpl implements MemberService {
         Member saved = memberRepository.save(member);
         return saved;
     }
+
+    @Override
+    public Member chargeGeneralCredit(ChargeRequestDTO chargeRequestDTO, Long memberId) {
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member member = optionalMember.orElseThrow(() -> new MemberNotFoundException(memberId));
+
+        int generalCredit = member.getGeneralCredit();
+        generalCredit += chargeRequestDTO.getChargeCredit();
+        member.setGeneralCredit(generalCredit);
+        Member saved = memberRepository.save(member);
+        return saved;
+    }
 }
