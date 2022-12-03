@@ -36,8 +36,8 @@ public class OrderController {
         if (isStudying == Boolean.TRUE) {
             throw new IsStudyingException(userDetails.getMember().getId().toString());
         }
-        StudyDTO studyDTO = studyService.postPremiunStudy(orderRequestDTO, userDetails.getMember().getId());
         OrderDTO orderDTO = orderService.postPremiumOrder(orderRequestDTO, userDetails.getMember().getId());
+        StudyDTO studyDTO = studyService.postPremiunStudy(orderRequestDTO, userDetails.getMember().getId());
 
         HashMap<String, Object> result = new HashMap<>();
         result.put("savedStudy", studyDTO);
