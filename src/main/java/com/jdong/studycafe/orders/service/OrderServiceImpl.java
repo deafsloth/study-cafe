@@ -80,7 +80,43 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDTO postNormalOrder(OrderRequestDTO orderRequestDTO, Long memberId) {
-        return null;
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member member = optionalMember.orElseThrow(()-> new MemberNotFoundException(memberId));
+        Optional<Cafe> optionalCafe = cafeRepository.findById(orderRequestDTO.getCafeId());
+        Cafe cafe = optionalCafe.orElseThrow(()-> new CafeNotFoundException(orderRequestDTO.getCafeId()));
+        Optional<Beverage> optionalBeverage = beverageRepository.findById(orderRequestDTO.getBeverageId());
+        Beverage beverage = optionalBeverage.orElseThrow(()->new BeverageNotFoundException((orderRequestDTO.getBeverageId())));
+        if (member.getGeneralCredit() >= orderRequestDTO.getCost()) {
+            int generalCredit = member.getGeneralCredit();
+            generalCredit -= orderRequestDTO.getCost();
+            member.setGeneralCredit(generalCredit);
+            memberRepository.save(member);
+            Order order = Order.builder()
+                    .member(member)
+                    .beverage(beverage)
+                    .cafe(cafe)
+                    .chargedTime(orderRequestDTO.getChargedTime())
+                    .cost(orderRequestDTO.getCost())
+                    .build();
+
+            Order saved = orderRepository.save(order);
+
+            OrderDTO result = OrderDTO.builder()
+                    .orderId(saved.getId())
+                    .cafeId(saved.getCafe().getId())
+                    .cafeName(saved.getCafe().getName())
+                    .beverageId(saved.getBeverage().getId())
+                    .beverageName(saved.getBeverage().getName())
+                    .mainImageUrl(saved.getBeverage().getMainImageUrl())
+                    .chargedTime(saved.getChargedTime())
+                    .cost(saved.getCost())
+                    .createTime(saved.getCreatedDate())
+                    .modifiedTime(saved.getModifiedDate())
+                    .build();
+            return result;
+        } else{
+            throw new NotEnoughMoneyException(memberId.toString());
+        }
     }
 
     @Override

@@ -47,6 +47,27 @@ public class OrderController {
         return ResponseEntity.ok().body(result);
     }
 
+    @PostMapping("/v2/orders/general")
+    public ResponseEntity<HashMap<String, Object>> postGeneralOrder(
+            Authentication authentication,
+            @RequestBody @Validated OrderRequestDTO orderRequestDTO
+    ) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Boolean isStudying = studyService.isStudying(userDetails.getMember().getId());
+        if (isStudying == Boolean.TRUE) {
+            throw new IsStudyingException(userDetails.getMember().getId().toString());
+        }
+        OrderDTO orderDTO = orderService.postNormalOrder(orderRequestDTO, userDetails.getMember().getId());
+        StudyDTO studyDTO = studyService.postPremiunStudy(orderRequestDTO, userDetails.getMember().getId());
+
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("savedStudy", studyDTO);
+        result.put("savedOrder", orderDTO);
+        result.put("message", "save order success");
+
+        return ResponseEntity.ok().body(result);
+    }
+
     @GetMapping("/v2/orders")
     public ResponseEntity<HashMap<String, Object>> getOrderListByMemberId(
             Authentication authentication
