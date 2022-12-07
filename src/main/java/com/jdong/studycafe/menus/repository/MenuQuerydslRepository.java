@@ -25,7 +25,9 @@ public class MenuQuerydslRepository {
                         menu.cafe.name,
                         menu.beverage.id,
                         menu.beverage.name,
+                        menu.beverage.price,
                         menu.beverage.mainImageUrl,
+                        menu.beverage.isPremium,
                         menu.createdDate,
                         menu.modifiedDate
                 ))
