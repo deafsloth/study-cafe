@@ -16,7 +16,7 @@ public class CafeDTO {
     private Long id;
     private String name;
     private String description;
-
+    private String mainImageUrl;
 //    private Point location;
     private Double latitude;
     private Double longitude;

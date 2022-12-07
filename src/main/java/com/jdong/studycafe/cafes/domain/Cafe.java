@@ -25,6 +25,7 @@ public class Cafe extends BaseTimeEntity {
 
     private String name;
     private String description;
+    private String mainImageUrl;
 
     //ST_Point(float x, float y); geodetic coordinates, X is longitude and Y is latitude
     @Column
